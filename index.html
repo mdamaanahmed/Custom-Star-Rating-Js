@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Star Rating</title>
+  </head>
+
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* #emoji {
+      font-size: 80px;
+      height: 100px;
+      width: 100px;
+    } */
+
+    #main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .star > .bi {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <div id="main">
+        <p id="emoji"></p>
+        <div>
+          <span class="star"><i class="bi bi-star" data-value="1"></i></span>
+          <span class="star"><i class="bi bi-star" data-value="2"></i></span>
+          <span class="star"><i class="bi bi-star" data-value="3"></i></span>
+          <span class="star"><i class="bi bi-star" data-value="4"></i></span>
+          <span class="star"><i class="bi bi-star" data-value="5"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const stars = document.getElementsByClassName("bi");
+      let checked = false;
+
+      // const setEmoji = (count, emoji) => {
+      //   if (!count) emoji.textContent = "";
+      //   if (count <= 2) emoji.textContent = String.fromCodePoint(0x1f612);
+      //   if (count == 3) emoji.textContent = String.fromCodePoint(0x1f603);
+      //   if (count > 4) emoji.textContent = String.fromCodePoint(0x1f60d);
+      //   // if (!checked) setEmoji();
+      // };
+      const addClass = (element) => {
+        element.classList.add("bi-star-fill");
+        element.classList.remove("bi-star");
+      };
+      const removeClass = (element) => {
+        element.classList.add("bi-star");
+        element.classList.remove("bi-star-fill");
+      };
+
+      const rating = (e, type = "") => {
+        const count = e.target.getAttribute("data-value");
+        // const emoji = document.getElementById("emoji");
+
+        Array.from({ length: count }, (_, i) => {
+          const element = document.querySelector(`[data-value="${i + 1}"]`);
+          if (type === "rate" && !checked) {
+            addClass(element);
+            // setEmoji(0, emoji);
+          } else if (type === "unRate" && !checked) {
+            removeClass(element);
+            // setEmoji(count, emoji);
+          } else {
+            addClass(element);
+            // setEmoji(count, emoji);
+          }
+        });
+      };
+
+      for (let star of stars) {
+        star.addEventListener("mouseover", (e) => rating(e, "rate"));
+        star.addEventListener("mouseleave", (e) => rating(e, "unRate"));
+        star.addEventListener("click", (e) => {
+          checked = !checked;
+          if (!checked) {
+            const elements = document.querySelectorAll("[data-value]");
+            for (const element of elements) {
+              removeClass(element);
+            }
+          }
+          rating(e);
+        });
+      }
+    </script>
+  </body>
+</html>
